@@ -1,0 +1,28 @@
+meta {
+  name: first
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:5000/api/mahal/2
+  body: json
+  auth: bearer
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsI…DY0fQ.65O6DqEQnVzEcYpnvkRXdZe3sv4QTzhaH1vHOXg76A4
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjAsI…DY0fQ.65O6DqEQnVzEcYpnvkRXdZe3sv4QTzhaH1vHOXg76A4
+}
+
+body:json {
+  {
+    "email":"someone@gmail.com",
+    "password":"1234"
+    
+  }
+  
+}

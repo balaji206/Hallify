@@ -60,20 +60,31 @@ exports.loginuser = (req, res) => {
 exports.getuser = (req, res) => {
   let user;
   try {
-    user = getUserFromHeader(req);  // May throw if token missing/invalid
+    user = getUserFromHeader(req);
   } catch (err) {
-    return res.status(401).json({ message: "Unauthorized: Invalid or missing token" });
+    console.error("Auth Error:", err);
+    return res.status(401).json({ 
+      message: "Unauthorized: Invalid or missing token",
+      details: err.message || err
+    });
   }
 
-  const { id: userId, role } = user;
+  const { id: userId } = user;
 
   const query = `SELECT * FROM users WHERE id = ?`;
   db.query(query, [userId], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
+    if (err) {
+      console.error("DB Error in getuser:", err);
+      return res.status(500).json({ 
+        error: err.message || "Unknown DB error",
+        details: err
+      });
+    }
     if (result.length === 0) return res.status(404).json({ message: "User not found" });
     res.status(200).json(result[0]);
   });
 };
+
 
 
 exports.updateuser = async (req, res) => {

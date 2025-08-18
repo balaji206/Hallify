@@ -20,11 +20,11 @@ const UpdateMahal = () => {
   // Fetch existing mahal data
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/mahal/get/${id}`)
+      .get(`https://hallify.onrender.com/api/mahal/get/${id}`)
       .then((res) => {
         const { name, location, capacity, price, description, image_url } = res.data;
         setFormData({ name, location, capacity, price, description, image: null });
-        setPreview(`http://localhost:5000/uploads/${image_url}`);
+        setPreview(`https://hallify.onrender.com/uploads/${image_url}`);
       })
       .catch((err) => console.error("Error fetching mahal:", err));
   }, [id]);
@@ -52,7 +52,7 @@ const UpdateMahal = () => {
     if (formData.image) data.append("image", formData.image);
 
     try {
-      await axios.put(`http://localhost:5000/api/mahal/update/${id}`, data, {
+      await axios.put(`https://hallify.onrender.com/api/mahal/update/${id}`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data"

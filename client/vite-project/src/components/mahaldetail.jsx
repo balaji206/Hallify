@@ -11,14 +11,14 @@ const MahalDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/mahal/get/${id}`)
+      .get(`https://hallify.onrender.com/api/mahal/get/${id}`)
       .then((res) => setMahal(res.data))
       .catch((err) => console.error("❌ Error fetching mahal:", err));
   }, [id]);
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/mahal/delete/${id}`, {
+      await axios.delete(`https://hallify.onrender.com/api/mahal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -43,7 +43,7 @@ const MahalDetails = () => {
       {/* Hero Section */}
       <div className="relative w-full h-96">
         <img
-          src={`http://localhost:5000/uploads/${mahal.image_url}`}
+          src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
           alt={mahal.name}
           className="w-full h-full object-cover"
         />

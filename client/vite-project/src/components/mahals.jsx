@@ -7,7 +7,7 @@ function Mahals() {
   const [mahals, setMahals] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/mahal/get')
+    axios.get('https://hallify.onrender.com/api/mahal/get')
       .then((res) => setMahals(res.data))
       .catch((err) => console.error('Error loading mahals:', err));
   }, []);
@@ -22,7 +22,7 @@ function Mahals() {
             <Link to={`/mahal/${mahal.id}`} key={mahal.id}>
               <div className="bg-white shadow-md rounded-lg overflow-hidden hover:scale-105 transition duration-300">
                 <img
-                  src={`http://localhost:5000/uploads/${mahal.image_url}`}
+                  src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
                   alt={mahal.name}
                   className="w-full h-48 object-cover"
                 />

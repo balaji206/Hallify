@@ -28,7 +28,7 @@ const FilterPage = () => {
 
   const fetchMahals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/mahal/get", {
+      const res = await axios.get("https://hallify.onrender.com/api/mahal/get", {
         params: filters,
       });
       setMahals(res.data);
@@ -169,7 +169,7 @@ const FilterPage = () => {
                   className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition"
                 >
                   <img
-                    src={`http://localhost:5000/uploads/${mahal.image_url}`}
+                    src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
                     alt={mahal.name}
                     className="h-56 w-full object-cover"
                   />

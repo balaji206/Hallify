@@ -12,7 +12,7 @@ console.log('Token length:', token.length);
 
     console.log(`Authorization header: Bearer ${token}`);
 console.log(JSON.stringify(`Bearer ${token}`));
-   axios.get("http://localhost:5000/api/users/get", {
+   axios.get("https://hallify.onrender.com/api/users/get", {
   headers: {
     Authorization: `Bearer ${token.trim().replace(/[\r\n]+/g, '')}`,
   }

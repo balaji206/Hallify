@@ -22,7 +22,7 @@ function Login() {
     e.preventDefault();
     const { email, password, role } = formData;
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", {
+      const res = await axios.post("https://hallify.onrender.com/api/users/login", {
         email,
         password,
         role: role.toLowerCase(),

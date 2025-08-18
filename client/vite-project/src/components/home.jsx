@@ -22,7 +22,7 @@ function Home() {
 
   const fetchMahals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/mahal/get", { params: { location } });
+      const res = await axios.get("https://hallify.onrender.com/api/mahal/get", { params: { location } });
       setMahals(res.data);
     } catch (err) {
       console.error("Failed to fetch mahals:", err);
@@ -169,7 +169,7 @@ function Home() {
               data-aos-delay={index * 100}
             >
               <img
-                src={`http://localhost:5000/uploads/${mahal.image_url}`}
+                src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
                 alt={mahal.name}
                 className="h-56 w-full object-cover"
               />

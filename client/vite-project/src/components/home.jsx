@@ -22,7 +22,7 @@ function Home() {
 
   const fetchMahals = async () => {
     try {
-      const res = await axios.get("https://hallify.onrender.com/api/mahal/get", { params: { location } });
+      const res = await axios.get("http://localhost:5000/api/mahal/get", { params: { location } });
       setMahals(res.data);
     } catch (err) {
       console.error("Failed to fetch mahals:", err);
@@ -49,7 +49,7 @@ function Home() {
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/25 to-transparent"></div>
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#ffffff] to-transparent"></div>
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-blue-950 to-transparent"></div>
         <div
           className="relative text-center text-white z-10 max-w-3xl px-4"
           data-aos="zoom-in"
@@ -60,17 +60,20 @@ function Home() {
           <p className="text-lg md:text-xl mb-8 opacity-90">
             Explore premium wedding halls across Tamil Nadu with ease.
           </p>
-          <a
-            href="#locations"
-            className="bg-gradient-to-r from-indigo-200 to-indigo-400 px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition duration-300"
-          >
-            Start Exploring
-          </a>
+          <button
+  onClick={() => document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" })}
+  className="bg-gradient-to-r from-indigo-300 to-indigo-400 px-8 py-4 rounded-full text-lg font-semibold shadow-lg 
+             transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 hover:shadow-xl hover:bg-indigo-600"
+>
+  Start Exploring
+</button>
+
+
         </div>
       </section>
 
       {/* ✅ Popular Locations */}
-      <section className="py-16 bg-gray-50 text-center" data-aos="fade-up">
+      <section className="py-16 text-center" data-aos="fade-up">
         <h2 className="text-4xl font-bold mb-12">Popular Locations</h2>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {[
@@ -169,7 +172,7 @@ function Home() {
               data-aos-delay={index * 100}
             >
               <img
-                src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
+                src={`http://localhost:5000/uploads/${mahal.image_url}`}
                 alt={mahal.name}
                 className="h-56 w-full object-cover"
               />

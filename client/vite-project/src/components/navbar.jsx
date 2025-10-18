@@ -65,6 +65,7 @@ const Navbar = () => {
   }`}
 >
       <div className="flex items-center justify-between w-full px-4">
+        <Link to='/'>
         <div
           className={`text-xl font-bold ${
             scrolled || location.pathname !== "/" ? "text-black" : "text-white"
@@ -72,6 +73,7 @@ const Navbar = () => {
         >
           Book your Space
         </div>
+        </Link>
 
         {/* Desktop Menu */}
         <ul

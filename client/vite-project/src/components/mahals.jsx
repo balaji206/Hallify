@@ -8,7 +8,7 @@ function Mahals() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/mahal/get')
+    axios.get('https://hallify.onrender.com/api/mahal/get')
       .then((res) => {
         setMahals(res.data);
         setLoading(false);
@@ -22,13 +22,13 @@ function Mahals() {
   return (
     <div className="bg-[#fdfbf7] min-h-screen font-sans text-gray-800">
       <Navbar />
-      
+
       {/* Page Header Section */}
       <div className="pt-32 pb-16 px-6 relative overflow-hidden">
         {/* Subtle decorative background elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-rose-100/40 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
         <div className="absolute top-20 right-0 w-96 h-96 bg-amber-100/40 rounded-full blur-3xl translate-x-1/3"></div>
-        
+
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <p className="text-amber-600 font-semibold tracking-widest uppercase text-sm mb-3">
             Handpicked Collection
@@ -45,7 +45,7 @@ function Mahals() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pb-24 relative z-10">
-        
+
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-12 h-12 border-4 border-rose-200 border-t-rose-800 rounded-full animate-spin"></div>
@@ -60,17 +60,17 @@ function Mahals() {
             {mahals.map((mahal) => (
               <Link to={`/mahal/${mahal.id}`} key={mahal.id} className="group block h-full">
                 <div className="bg-white rounded-2xl shadow-sm hover:shadow-2xl hover:shadow-rose-900/10 transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col h-full transform hover:-translate-y-1">
-                  
+
                   {/* Image Section */}
                   <div className="relative h-64 overflow-hidden">
                     <img
-                      src={`http://localhost:5000/uploads/${mahal.image_url}`}
+                      src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
                       alt={mahal.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
                     {/* Gradient overlay for better text contrast */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    
+
                     {/* Badge */}
                     <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-rose-800 tracking-wider uppercase shadow-sm">
                       Premium
@@ -85,7 +85,7 @@ function Mahals() {
 
                   {/* Card Content Section */}
                   <div className="p-6 flex flex-col flex-grow">
-                    
+
                     {/* Location */}
                     <div className="flex items-center gap-1.5 text-amber-600 text-xs font-semibold uppercase tracking-widest mb-3">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -106,7 +106,7 @@ function Mahals() {
 
                     {/* Card Footer Details */}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100/80">
-                      
+
                       {/* Capacity */}
                       <div className="flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
                         <svg className="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +122,7 @@ function Mahals() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                         </svg>
                       </span>
-                      
+
                     </div>
                   </div>
 

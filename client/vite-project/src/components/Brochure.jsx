@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { 
-  ArrowLeft, 
-  Edit, 
-  Save, 
-  X, 
-  CheckCircle2, 
-  Layers, 
-  Users, 
+import {
+  ArrowLeft,
+  Edit,
+  Save,
+  X,
+  CheckCircle2,
+  Layers,
+  Users,
   Info,
   Star,
   Clock,
@@ -57,7 +57,7 @@ function Brochure() {
   useEffect(() => {
     const fetchMahal = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/mahal/get/${id}`);
+        const res = await axios.get(`https://hallify.onrender.com/api/mahal/get/${id}`);
         setMahal(res.data);
         setFormData({
           price: res.data.price,
@@ -68,7 +68,7 @@ function Brochure() {
           veg_price: res.data.veg_price || 450,
           non_veg_price: res.data.non_veg_price || 650
         });
-        
+
         if (user && res.data.owner_id === user.id) {
           setIsOwner(true);
         }
@@ -88,13 +88,13 @@ function Brochure() {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/mahal/update/${id}`, {
+      await axios.put(`https://hallify.onrender.com/api/mahal/update/${id}`, {
         ...mahal,
         ...formData
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       setMahal({ ...mahal, ...formData });
       setEditMode(false);
       alert("Brochure updated successfully!");
@@ -113,12 +113,12 @@ function Brochure() {
 
   return (
     <div className="bg-[#fdfbf7] min-h-screen font-sans pb-24 text-gray-800">
-      
+
       {/* Dynamic Header */}
       <div className="bg-rose-900 text-white py-16 px-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-400/10 rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-rose-800/20 rounded-full -ml-24 -mb-24"></div>
-        
+
         <div className="max-w-5xl mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <Link to={`/mahal/${id}`} className="inline-flex items-center gap-2 text-rose-200 hover:text-white transition-colors mb-6 text-sm font-bold uppercase tracking-widest">
@@ -127,13 +127,12 @@ function Brochure() {
             <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight mb-2 uppercase">{mahal.name}</h1>
             <p className="text-amber-400 font-bold uppercase tracking-[0.3em] text-xs">Dynamic Pricing brochure</p>
           </div>
-          
+
           {isOwner && (
-            <button 
+            <button
               onClick={() => setEditMode(!editMode)}
-              className={`flex items-center gap-3 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-xl ${
-                editMode ? "bg-white text-rose-900" : "bg-amber-400 text-rose-900 hover:bg-amber-300"
-              }`}
+              className={`flex items-center gap-3 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-xl ${editMode ? "bg-white text-rose-900" : "bg-amber-400 text-rose-900 hover:bg-amber-300"
+                }`}
             >
               {editMode ? <><X size={18} /> Cancel Editing</> : <><Edit size={18} /> Edit Brochure</>}
             </button>
@@ -144,20 +143,20 @@ function Brochure() {
       <div className="max-w-5xl mx-auto px-6 -mt-10">
         <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-rose-900/10 border border-ruby-50 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            
+
             {/* Left Column */}
             <div className="p-10 md:p-14 bg-rose-50/30">
               <div className="rounded-3xl overflow-hidden shadow-2xl mb-10 h-64">
-                <img src={`http://localhost:5000/uploads/${mahal.image_url}`} className="w-full h-full object-cover" alt={mahal.name} />
+                <img src={`https://hallify.onrender.com/uploads/${mahal.image_url}`} className="w-full h-full object-cover" alt={mahal.name} />
               </div>
-              
+
               <div className="space-y-8">
                 <div>
                   <h3 className="text-rose-900 font-serif text-2xl font-bold mb-4 flex items-center gap-3">
                     <Info className="text-amber-500" /> About the Venue
                   </h3>
                   {editMode ? (
-                    <textarea 
+                    <textarea
                       name="description"
                       value={formData.description}
                       onChange={handleInputChange}
@@ -240,7 +239,7 @@ function Brochure() {
               <div className="space-y-6">
                 <h3 className="text-rose-900 font-serif text-2xl font-bold">Facilities & Amenities</h3>
                 {editMode ? (
-                  <textarea 
+                  <textarea
                     name="amenities"
                     value={formData.amenities}
                     onChange={handleInputChange}

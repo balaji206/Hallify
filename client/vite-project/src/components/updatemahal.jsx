@@ -21,11 +21,11 @@ const UpdateMahal = () => {
   // Fetch existing mahal data
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/mahal/get/${id}`)
+      .get(`https://hallify.onrender.com/api/mahal/get/${id}`)
       .then((res) => {
         const { name, location, capacity, price, description, contact, image_url } = res.data;
         setFormData({ name, location, capacity, price, description, contact: contact || "", image: null });
-        setPreview(`http://localhost:5000/uploads/${image_url}`);
+        setPreview(`https://hallify.onrender.com/uploads/${image_url}`);
       })
       .catch((err) => console.error("Error fetching mahal:", err));
   }, [id]);
@@ -53,7 +53,7 @@ const UpdateMahal = () => {
     if (formData.image) data.append("image", formData.image);
 
     try {
-      await axios.put(`http://localhost:5000/api/mahal/update/${id}`, data, {
+      await axios.put(`https://hallify.onrender.com/api/mahal/update/${id}`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -123,16 +123,16 @@ const UpdateMahal = () => {
           </div>
           <div>
             <label className="block text-gray-700 font-medium mb-2">Contact</label>
-          <input
-            type="tel"
-            name="contact"
-            value={formData.contact}
-            placeholder="Contact Number"
-            pattern="[0-9]{10}" // Validates for 10-digit number
-            className="w-full border rounded-lg px-4 py-2"
-            onChange={handleChange}
-            required
-          />
+            <input
+              type="tel"
+              name="contact"
+              value={formData.contact}
+              placeholder="Contact Number"
+              pattern="[0-9]{10}" // Validates for 10-digit number
+              className="w-full border rounded-lg px-4 py-2"
+              onChange={handleChange}
+              required
+            />
           </div>
           <div>
             <label className="block text-gray-700 font-medium mb-2">Description</label>

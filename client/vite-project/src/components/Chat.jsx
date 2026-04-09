@@ -33,9 +33,9 @@ function Chat() {
     // 1. Fetch Mahal & Owner Info
     const fetchData = async () => {
       try {
-        const mRes = await axios.get(`http://localhost:5000/api/mahal/get/${mahalId}`);
+        const mRes = await axios.get(`https://hallify.onrender.com/api/mahal/get/${mahalId}`);
         setMahal(mRes.data);
-        
+
         // Fetch owner info (using get user by id if available, else just use a placeholder)
         // For this demo, we'll just use "Venue Manager"
         setOwner({ fullName: "Venue Manager" });
@@ -50,7 +50,7 @@ function Chat() {
       const allChats = JSON.parse(localStorage.getItem("hallify_chats") || "{}");
       if (allChats[chatId]) {
         const chatData = allChats[chatId];
-        
+
         // Mark received messages as read
         const updatedMessages = chatData.messages.map(msg => {
           if (msg.senderId !== currentUser.id) {
@@ -58,10 +58,10 @@ function Chat() {
           }
           return msg;
         });
-        
+
         setMessages(updatedMessages);
         setChatMeta(chatData);
-        
+
         // Save back as read
         allChats[chatId].messages = updatedMessages;
         localStorage.setItem("hallify_chats", JSON.stringify(allChats));
@@ -101,7 +101,7 @@ function Chat() {
 
     allChats[chatId].messages.push(newMessage);
     localStorage.setItem("hallify_chats", JSON.stringify(allChats));
-    
+
     setMessages([...messages, newMessage]);
     setInputText("");
   };
@@ -110,7 +110,7 @@ function Chat() {
 
   return (
     <div className="bg-[#fdfbf7] min-h-screen font-sans flex flex-col">
-      
+
       {/* Chat Header */}
       <div className="bg-white border-b border-gray-100 fixed top-0 w-full z-40 shadow-sm pt-20 md:pt-4">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -127,8 +127,8 @@ function Chat() {
                   {mahal?.name || "Loading..."}
                 </h2>
                 <p className="text-[10px] uppercase font-bold text-amber-500 tracking-widest flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span> 
-                  {mahal?.owner_id === currentUser?.id 
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                  {mahal?.owner_id === currentUser?.id
                     ? `Direct message with ${chatMeta?.userName || "Guest"}`
                     : "Direct message with Owner"}
                 </p>
@@ -147,15 +147,15 @@ function Chat() {
           </div>
         ) : (
           messages.map((msg) => (
-            <div 
-              key={msg.id} 
+            <div
+              key={msg.id}
               className={`flex ${msg.senderId === currentUser.id ? "justify-end" : "justify-start"}`}
             >
               <div className={`max-w-[80%] md:max-w-[60%] flex flex-col ${msg.senderId === currentUser.id ? "items-end" : "items-start"}`}>
                 <div className={`
                   px-5 py-3 rounded-[2rem] text-sm md:text-base shadow-sm
-                  ${msg.senderId === currentUser.id 
-                    ? "bg-rose-900 text-white rounded-tr-none" 
+                  ${msg.senderId === currentUser.id
+                    ? "bg-rose-900 text-white rounded-tr-none"
                     : "bg-white border border-rose-50 text-gray-800 rounded-tl-none"}
                 `}>
                   {msg.text}
@@ -172,20 +172,20 @@ function Chat() {
 
       {/* Input Area */}
       <div className="fixed bottom-0 w-full bg-[#fdfbf7]/80 backdrop-blur-md z-40 pb-8 pt-4">
-        <form 
+        <form
           onSubmit={handleSendMessage}
           className="max-w-4xl mx-auto px-6 flex gap-4"
         >
-          <input 
+          <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder={mahal?.owner_id === currentUser?.id 
-              ? `Reply to ${chatMeta?.userName || "Guest"}...` 
+            placeholder={mahal?.owner_id === currentUser?.id
+              ? `Reply to ${chatMeta?.userName || "Guest"}...`
               : "Type your message to the owner..."}
             className="flex-1 bg-white border border-rose-100 shadow-xl shadow-rose-900/5 rounded-full px-8 py-4 focus:outline-none focus:border-rose-400 transition-all placeholder-gray-400"
           />
-          <button 
+          <button
             type="submit"
             className="bg-rose-900 text-white p-4 rounded-full shadow-xl hover:bg-black hover:scale-110 transition-all"
           >
@@ -193,7 +193,7 @@ function Chat() {
           </button>
         </form>
       </div>
-      
+
     </div>
   );
 }

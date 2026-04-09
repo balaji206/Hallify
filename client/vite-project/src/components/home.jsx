@@ -22,7 +22,7 @@ function Home() {
 
   const fetchMahals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/mahal/get", { params: { location } });
+      const res = await axios.get("https://hallify.onrender.com/api/mahal/get", { params: { location } });
       setMahals(res.data);
     } catch (err) {
       console.error("Failed to fetch mahals:", err);
@@ -159,7 +159,7 @@ function Home() {
           Featured Venues
           <div className="w-24 h-1 bg-gradient-to-r from-rose-200 via-rose-400 to-rose-200 rounded-full"></div>
         </h2>
-        
+
         <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-10 max-w-7xl mx-auto px-6">
           {mahals.slice(0, 6).map((mahal, index) => (
             <Link
@@ -171,7 +171,7 @@ function Home() {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={`http://localhost:5000/uploads/${mahal.image_url}`}
+                  src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
                   alt={mahal.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
@@ -180,7 +180,7 @@ function Home() {
                   Premium
                 </div>
               </div>
-              
+
               <div className="p-6 flex flex-col flex-grow text-left">
                 <div className="flex items-center gap-1.5 text-amber-600 text-xs font-semibold uppercase tracking-widest mb-2">
                   <MapPin className="w-4 h-4" />
@@ -200,7 +200,7 @@ function Home() {
             </Link>
           ))}
         </div>
-        
+
         <div className="mt-16">
           <Link to="/mahals">
             <button className="bg-white border-2 border-rose-800 text-rose-800 hover:bg-rose-800 hover:text-white px-10 py-4 rounded-full font-serif tracking-widest uppercase font-semibold transition-all duration-300 shadow-lg">
@@ -237,8 +237,8 @@ function Home() {
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-serif text-white mb-6 tracking-wide">Get in Touch</h2>
           <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 text-gray-300 mb-10">
-            <p className="flex items-center gap-2"><MapPin className="text-amber-500 w-5 h-5"/> Tamil Nadu, India</p>
-            <p className="flex items-center gap-2"><Headphones className="text-amber-500 w-5 h-5"/> +91 98765 43210</p>
+            <p className="flex items-center gap-2"><MapPin className="text-amber-500 w-5 h-5" /> Tamil Nadu, India</p>
+            <p className="flex items-center gap-2"><Headphones className="text-amber-500 w-5 h-5" /> +91 98765 43210</p>
             <p className="flex items-center gap-2">📧 info@mahalbooking.com</p>
           </div>
           <div className="flex justify-center gap-8 mt-6 border-b border-rose-900/50 pb-10">

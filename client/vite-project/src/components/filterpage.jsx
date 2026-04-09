@@ -28,7 +28,7 @@ const FilterPage = () => {
 
   const fetchMahals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/mahal/get", {
+      const res = await axios.get("https://hallify.onrender.com/api/mahal/get", {
         params: filters,
       });
       setMahals(res.data);
@@ -58,8 +58,8 @@ const FilterPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-2 font-sans">  {/* Reduced px from 6 → 2 */}
-  <div className="max-w-[1400px] mx-auto flex gap-10">
-        
+      <div className="max-w-[1400px] mx-auto flex gap-10">
+
         {/* ✅ Sidebar Filters (Fixed Width, Far Left) */}
         <div className="w-80 bg-white p-6 rounded-3xl shadow-lg sticky top-8 h-fit -ml-4">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">Filters</h2>
@@ -160,25 +160,25 @@ const FilterPage = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {mahals.map((mahal, index) => (
                 <Link
-    key={mahal._id}
-    to={`/mahal/${mahal.id}`} // ✅ Correct dynamic route
-    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition block"
-  >
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition"
+                  key={mahal._id}
+                  to={`/mahal/${mahal.id}`} // ✅ Correct dynamic route
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition block"
                 >
-                  <img
-                    src={`http://localhost:5000/uploads/${mahal.image_url}`}
-                    alt={mahal.name}
-                    className="h-56 w-full object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-xl mb-1">{mahal.name}</h3>
-                    <p className="text-gray-600">{mahal.location}</p>
-                    <p className="text-indigo-500 font-semibold mt-2">₹{mahal.price}</p>
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition"
+                  >
+                    <img
+                      src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
+                      alt={mahal.name}
+                      className="h-56 w-full object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="font-bold text-xl mb-1">{mahal.name}</h3>
+                      <p className="text-gray-600">{mahal.location}</p>
+                      <p className="text-indigo-500 font-semibold mt-2">₹{mahal.price}</p>
+                    </div>
                   </div>
-                </div>
                 </Link>
               ))}
             </div>

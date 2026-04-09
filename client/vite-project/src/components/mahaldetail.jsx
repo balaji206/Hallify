@@ -12,7 +12,7 @@ const MahalDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/mahal/get/${id}`)
+      .get(`https://hallify.onrender.com/api/mahal/get/${id}`)
       .then((res) => setMahal(res.data))
       .catch((err) => console.error("❌ Error fetching mahal:", err));
   }, [id]);
@@ -20,9 +20,9 @@ const MahalDetails = () => {
   const handleDelete = async () => {
     try {
       if (!window.confirm("Are you sure you want to delete this venue? This action cannot be undone.")) return;
-      
+
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/mahal/delete/${id}`, {
+      await axios.delete(`https://hallify.onrender.com/api/mahal/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,11 +51,11 @@ const MahalDetails = () => {
 
   return (
     <div className="bg-[#fdfbf7] min-h-screen font-sans text-gray-800 pb-20">
-      
+
       {/* Hero Header Section */}
       <div className="relative w-full h-[50vh] md:h-[60vh]">
         <img
-          src={`http://localhost:5000/uploads/${mahal.image_url}`}
+          src={`https://hallify.onrender.com/uploads/${mahal.image_url}`}
           alt={mahal.name}
           className="w-full h-full object-cover"
         />
@@ -80,7 +80,7 @@ const MahalDetails = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Back Navigation */}
         <Link to="/" className="absolute top-6 left-6 md:top-8 md:left-8 z-10">
           <button className="flex items-center gap-2 bg-white/90 backdrop-blur-md text-gray-800 px-4 py-2 rounded-full shadow-lg hover:bg-white hover:-translate-x-1 transition-all font-medium text-sm border border-gray-200">
@@ -94,10 +94,10 @@ const MahalDetails = () => {
 
       {/* Main Content Area - Split Layout */}
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-12 flex flex-col lg:flex-row gap-12">
-        
+
         {/* Left Column: Extensive Venue Details */}
         <div className="flex-1 space-y-12">
-          
+
           {/* About Section */}
           <section>
             <h2 className="text-3xl font-serif text-rose-900 mb-6 flex items-center gap-4">
@@ -159,7 +159,7 @@ const MahalDetails = () => {
         {/* Right Column: Sticky Booking Card */}
         <div className="w-full lg:w-[420px]">
           <div className="bg-white rounded-2xl shadow-xl shadow-rose-900/5 border border-gray-100 p-8 sticky top-10">
-            
+
             {/* Price Header */}
             <div className="text-center pb-6 border-b border-gray-100">
               <p className="text-gray-400 uppercase tracking-widest text-xs font-semibold mb-2">Venue Rental</p>

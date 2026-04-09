@@ -5,20 +5,31 @@ const { getUserFromHeader } = require('../middelware/authmiddleware');
 
 exports.registeruser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { fullName, email, password, role } = req.body;
+
+    console.log("BODY:", req.body);
+
     const salt = await bcrypt.genSalt(10);
     const hashedpassword = await bcrypt.hash(password, salt);
 
-    const query = `INSERT INTO users(name,email,password,role) VALUES(?,?,?,?)`;
-    db.query(query, [name, email, hashedpassword, role], (err) => {
-      if (err) return res.status(500).json({ error: err.message });
+    const query = `
+      INSERT INTO users("fullName",email,password,role)
+      VALUES($1, $2, $3, $4)
+    `;
+
+    db.query(query, [fullName, email, hashedpassword, role], (err) => {
+      if (err) {
+        console.error("REGISTER ERROR:", err);
+        return res.status(500).json({ error: err.message });
+      }
       res.status(201).json({ message: "User registered successfully" });
     });
+
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    console.error("CATCH ERROR:", err);
+    res.status(500).json({ error: err.message });
   }
 };
-
 exports.loginuser = (req, res) => {
   let { email, password, role } = req.body;
 
@@ -28,11 +39,11 @@ exports.loginuser = (req, res) => {
 
   role = role.toLowerCase();
 
-  db.query(`SELECT * FROM users WHERE email = ? AND role = ?`, [email, role], async (err, result) => {
+  db.query(`SELECT * FROM users WHERE email = $1 AND role = $2`, [email, role], async (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
-    if (result.length === 0) return res.status(404).json({ message: "User not found" });
+    if (result.rows.length === 0) return res.status(404).json({ message: "User not found" });
 
-    const user = result[0];
+    const user = result.rows[0];
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid credentials" });
 
@@ -47,7 +58,7 @@ exports.loginuser = (req, res) => {
       token,
       user: {
         id: user.id,
-        name: user.name,
+        fullName: user.fullName,
         email: user.email,
         role: user.role
       }
@@ -71,7 +82,7 @@ exports.getuser = (req, res) => {
 
   const { id: userId } = user;
 
-  const query = `SELECT * FROM users WHERE id = ?`;
+  const query = `SELECT * FROM users WHERE id = $1`;
   db.query(query, [userId], (err, result) => {
     if (err) {
       console.error("DB Error in getuser:", err);
@@ -80,8 +91,8 @@ exports.getuser = (req, res) => {
         details: err
       });
     }
-    if (result.length === 0) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(result[0]);
+    if (result.rows.length === 0) return res.status(404).json({ message: "User not found" });
+    res.status(200).json(result.rows[0]);
   });
 };
 
@@ -96,13 +107,13 @@ exports.updateuser = async (req, res) => {
       return res.status(403).json({ message: "You are not authorized to update this user" });
     }
 
-    const { name, email, password, role: newRole } = req.body;
+    const { fullName, email, password, role: newRole } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    db.query(`UPDATE users SET name=?, email=?, password=?, role=? WHERE id = ?`,
-      [name, email, hashedPassword, newRole, toupdate], (err) => {
+    db.query(`UPDATE users SET "fullName"=$1, email=$2, password=$3, role=$4 WHERE id = $5`,
+      [fullName, email, hashedPassword, newRole, toupdate], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(200).json({ message: "User updated successfully" });
       });
@@ -114,29 +125,63 @@ exports.updateuser = async (req, res) => {
 
 exports.deleteuser = (req, res) => {
   try {
-    const requestId = parseInt(req.headers['x-user-id']);
+    const { id: requestId, role: requesterRole } = getUserFromHeader(req);
     const targetId = parseInt(req.params.id);
 
-    if (!requestId) {
-      return res.status(400).json({ message: "User ID header is missing" });
+    if (requesterRole !== 'admin') {
+      return res.status(403).json({ message: "Admin access required" });
     }
 
-    db.query(`SELECT * FROM users WHERE id = ?`, [requestId], (err, result) => {
+    if (requestId === targetId) {
+        return res.status(400).json({ message: "Admins cannot delete their own account from the dashboard" });
+    }
+
+    db.query(`DELETE FROM users WHERE id = $1`, [targetId], (err) => {
       if (err) return res.status(500).json({ error: err.message });
-      if (result.length === 0) return res.status(404).json({ message: "User not found" });
-
-      const requester = result[0];
-
-      if (requester.role === 'admin' && requestId !== targetId) {
-        db.query(`DELETE FROM users WHERE id = ?`, [targetId], (err) => {
-          if (err) return res.status(500).json({ error: err.message });
-          res.status(200).json({ message: "User deleted successfully" });
-        });
-      } else {
-        res.status(403).json({ message: "You are not authorized to delete this user" });
-      }
+      res.status(200).json({ message: "User deleted successfully" });
     });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(401).json({ error: "Unauthorized" });
   }
+};
+
+/**
+ * Admin: Get all users
+ */
+exports.getUsers = (req, res) => {
+    const { role } = getUserFromHeader(req);
+    if (role !== 'admin') {
+        return res.status(403).json({ message: "Admin access required" });
+    }
+
+    db.query('SELECT id, "fullName", email, role, created_at FROM users ORDER BY created_at DESC', (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json(result.rows);
+    });
+};
+
+/**
+ * Admin: Update user role
+ */
+exports.updateUserRole = (req, res) => {
+    try {
+        const { role } = getUserFromHeader(req);
+        if (role !== 'admin') {
+            return res.status(403).json({ message: "Admin access required" });
+        }
+
+        const targetId = req.params.id;
+        const { role: newRole } = req.body;
+
+        if (!['user', 'owner', 'admin'].includes(newRole)) {
+            return res.status(400).json({ message: "Invalid role. Role must be user, owner, or admin." });
+        }
+
+        db.query('UPDATE users SET role = $1 WHERE id = $2', [newRole, targetId], (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.status(200).json({ message: `User role successfully updated to ${newRole}` });
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };

@@ -1,3 +1,4 @@
+// Signup.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -5,7 +6,7 @@ import signuppage from "../assets/engin-akyurt-i3rFV6ULk-o-unsplash.jpg";
 
 function Signup() {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
     role: "user",
@@ -46,7 +47,6 @@ function Signup() {
       });
 
       if (verifyRes.data.message === "OTP verified") {
-        // Proceed to register
         const res = await axios.post("http://localhost:5000/api/users/register", formData);
         alert(res.data.message);
         navigate("/login");
@@ -62,41 +62,49 @@ function Signup() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center relative font-sans"
       style={{
         backgroundImage: `url(${signuppage})`,
       }}
     >
-      <div className="absolute inset-0 bg-black/50"></div>
+      {/* Luxury Dark Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-[#1a0f14]/90"></div>
 
-      <Link to="/">
-        <button className="absolute top-6 left-6 text-white font-semibold hover:text-gray-300 from-gray-50 to-gray-400 bg-blur p-2 px-4 rounded-2xl z-10">
-          Back
+      {/* Elegant Back Navigation */}
+      <Link to="/" className="absolute top-8 left-8 z-20">
+        <button className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-2.5 rounded-full hover:bg-white/20 hover:scale-105 transition-all font-serif tracking-widest uppercase text-xs shadow-lg">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Return
         </button>
       </Link>
 
+      {/* Form Container */}
       <form
         onSubmit={otpSent ? handleOtpSubmit : sendOtp}
-        className="relative z-10 bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-xl w-full max-w-md min-h-[30rem] flex flex-col justify-center"
+        className="relative z-10 bg-[#1a0f14]/60 backdrop-blur-xl border border-rose-900/50 p-10 rounded-[2rem] shadow-[0_0_50px_rgba(136,19,55,0.3)] w-full max-w-md min-h-[30rem] flex flex-col justify-center"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">
-          Signup
-        </h2>
+        <div className="text-center mb-8">
+          <p className="text-amber-400 font-semibold tracking-widest uppercase text-xs mb-2">Join The Elite</p>
+          <h2 className="text-4xl font-serif font-bold text-white drop-shadow-md">
+            Begin Your Journey
+          </h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-amber-600 to-amber-400 mx-auto mt-4 rounded-full"></div>
+        </div>
 
         {/* Step 1: User Info */}
         <input
           type="text"
-          name="name"
-          placeholder="Name"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+          name="fullName"
+          placeholder="Full Name"
+          className="w-full p-4 mb-4 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-amber-500 focus:bg-white/10 transition-all shadow-inner"
           onChange={handleChange}
           required
         />
         <input
           type="email"
           name="email"
-          placeholder="Email"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+          placeholder="Email Address"
+          className="w-full p-4 mb-4 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-amber-500 focus:bg-white/10 transition-all shadow-inner"
           onChange={handleChange}
           required
         />
@@ -104,45 +112,50 @@ function Signup() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+          className="w-full p-4 mb-4 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-amber-500 focus:bg-white/10 transition-all shadow-inner"
           onChange={handleChange}
           required
         />
-        <select
-          name="role"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-gray-200 border border-white/30 focus:outline-none"
-          onChange={handleChange}
-          required
-        >
-          <option value="user" className="text-black">User</option>
-          <option value="owner" className="text-black">Owner</option>
-        </select>
+        <div className="relative mb-6">
+          <select
+            name="role"
+            className="w-full p-4 rounded-xl bg-white/5 text-gray-200 border border-white/10 focus:outline-none focus:border-amber-500 transition-all shadow-inner appearance-none cursor-pointer"
+            onChange={handleChange}
+            required
+          >
+            <option value="user" className="text-gray-900 bg-white">Guest / User</option>
+            <option value="owner" className="text-gray-900 bg-white">Venue Owner</option>
+          </select>
+          <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-amber-500">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+          </div>
+        </div>
 
         {/* Step 2: OTP Input */}
         {otpSent && (
-          <>
+          <div className="animate-fade-in-up">
             <input
               type="text"
-              placeholder="Enter OTP"
+              placeholder="Enter Security OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+              className="w-full p-4 mb-6 rounded-xl bg-amber-500/10 text-amber-300 placeholder-amber-700/50 border border-amber-500/50 focus:outline-none focus:border-amber-400 focus:bg-amber-500/20 transition-all text-center tracking-widest text-lg font-bold shadow-inner"
               required
             />
-          </>
+          </div>
         )}
 
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-800 transition duration-300 font-semibold"
+          className="w-full bg-gradient-to-r from-rose-700 to-rose-900 text-white py-4 rounded-xl hover:from-rose-800 hover:to-black transition-all duration-300 font-serif tracking-widest uppercase font-bold shadow-xl border border-rose-500/30 group flex justify-center items-center gap-2"
         >
-          {otpSent ? (isVerifying ? "Verifying..." : "Verify & Signup") : "Send OTP"}
+          {otpSent ? (isVerifying ? "Verifying..." : "Verify & Reserve") : "Secure Signup"}
         </button>
 
-        <p className="text-center text-gray-200 text-sm pt-4">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline hover:text-blue-600">
-            Login
+        <p className="text-center text-gray-400 text-sm pt-6 font-serif tracking-wide">
+          Already a member?{" "}
+          <Link to="/login" className="text-amber-500 hover:text-amber-400 font-bold transition-colors underline decoration-amber-500/30 underline-offset-4">
+            Access Account
           </Link>
         </p>
       </form>

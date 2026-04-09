@@ -8,10 +8,13 @@ const {
   getMahals,
   updateMahal,
   deleteMahal,
-  getMahalsbyId
+  getMahalsbyId,
+  getOwnerMahals
 } = require('../controllers/mahalcontroller');
 
 router.get('/get', getMahals);
+
+router.get('/owner', getOwnerMahals);
 
 router.get('/get/:id', getMahalsbyId);
 

@@ -1,7 +1,9 @@
+// Login.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import loginimage from "../assets/engin-akyurt-i3rFV6ULk-o-unsplash.jpg";
+
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -33,11 +35,10 @@ function Login() {
 
       alert("Login successful ✅");
 
-      // ✅ Save to localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      navigate("/"); // redirect to home or dashboard
+      navigate("/");
     } catch (err) {
       console.error("Login error:", err);
       alert(err.response?.data?.message || "Login failed ❌");
@@ -46,35 +47,40 @@ function Login() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center relative font-sans"
       style={{
         backgroundImage: `url(${loginimage})`,
       }}
     >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      {/* Luxury Dark Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-[#1a0f14]/90"></div>
 
-      {/* Back Button */}
-      <Link to="/">
-        <button className="absolute top-6 left-6 text-white font-semibold hover:text-gray-300 bg-indigo-700 p-2 px-4 rounded-2xl z-10">
-          Back
+      {/* Elegant Back Navigation */}
+      <Link to="/" className="absolute top-8 left-8 z-20">
+        <button className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 py-2.5 rounded-full hover:bg-white/20 hover:scale-105 transition-all font-serif tracking-widest uppercase text-xs shadow-lg">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Return
         </button>
       </Link>
 
-      {/* Login Form */}
+      {/* Form Container */}
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-xl w-full max-w-md min-h-[25rem] flex flex-col justify-center"
+        className="relative z-10 bg-[#1a0f14]/60 backdrop-blur-xl border border-rose-900/50 p-10 rounded-[2rem] shadow-[0_0_50px_rgba(136,19,55,0.3)] w-full max-w-md min-h-[25rem] flex flex-col justify-center"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">
-          Login
-        </h2>
+        <div className="text-center mb-8">
+          <p className="text-amber-400 font-semibold tracking-widest uppercase text-xs mb-2">Welcome Back</p>
+          <h2 className="text-4xl font-serif font-bold text-white drop-shadow-md">
+            Access Account
+          </h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-amber-600 to-amber-400 mx-auto mt-4 rounded-full"></div>
+        </div>
 
         <input
           type="email"
           name="email"
-          placeholder="Email"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+          placeholder="Email Address"
+          className="w-full p-4 mb-4 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-amber-500 focus:bg-white/10 transition-all shadow-inner"
           onChange={handleChange}
           required
         />
@@ -83,39 +89,38 @@ function Login() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:outline-none"
+          className="w-full p-4 mb-4 rounded-xl bg-white/5 text-white placeholder-gray-400 border border-white/10 focus:outline-none focus:border-amber-500 focus:bg-white/10 transition-all shadow-inner"
           onChange={handleChange}
           required
         />
 
-        <select
-          name="role"
-          className="w-full p-3 mb-4 rounded-lg bg-white/20 text-gray-200 border border-white/30 focus:outline-none"
-          onChange={handleChange}
-          required
-        >
-          <option value="user" className="text-black">
-            User
-          </option>
-          <option value="owner" className="text-black">
-            Owner
-          </option>
-          <option value="admin" className="text-black">
-            Admin
-          </option>
-        </select>
+        <div className="relative mb-6">
+          <select
+            name="role"
+            className="w-full p-4 rounded-xl bg-white/5 text-gray-200 border border-white/10 focus:outline-none focus:border-amber-500 transition-all shadow-inner appearance-none cursor-pointer"
+            onChange={handleChange}
+            required
+          >
+            <option value="user" className="text-gray-900 bg-white">Guest / User</option>
+            <option value="owner" className="text-gray-900 bg-white">Venue Owner</option>
+            <option value="admin" className="text-gray-900 bg-white">Administrator</option>
+          </select>
+          <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-amber-500">
+             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+          </div>
+        </div>
 
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-800 transition duration-300 font-semibold"
+          className="w-full bg-gradient-to-r from-rose-700 to-rose-900 text-white py-4 rounded-xl hover:from-rose-800 hover:to-black transition-all duration-300 font-serif tracking-widest uppercase font-bold shadow-xl border border-rose-500/30 mt-2"
         >
-          Login
+          Authenticate
         </button>
 
-        <p className="text-center text-gray-200 text-sm pt-4">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-indigo-600 hover:underline">
-            Signup
+        <p className="text-center text-gray-400 text-sm pt-6 font-serif tracking-wide">
+          Not part of the elite yet?{" "}
+          <Link to="/register" className="text-amber-500 hover:text-amber-400 font-bold transition-colors underline decoration-amber-500/30 underline-offset-4">
+            Apply Now
           </Link>
         </p>
       </form>

@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const transporter = require('../config/mailer');
 
 // In-memory OTP store (you can use DB/Redis in real apps)
 const otpStore = new Map();
@@ -7,15 +8,6 @@ const otpStore = new Map();
 function generateOtp() {
   return Math.floor(100000 + Math.random() * 900000);
 }
-
-// Nodemailer transporter
-const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: process.env.EMAIL_USER,     // your Gmail
-    pass: process.env.EMAIL_PASS      // your App Password
-  }
-});
 
 // 👉 Send OTP to email
 exports.sendOtp = async (req, res) => {

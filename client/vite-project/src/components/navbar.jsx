@@ -1,16 +1,40 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { User } from "lucide-react";
+import { User, MessageSquare } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // ✅ Calculate unread messages from localStorage
+  const calculateUnread = () => {
+    try {
+      const chats = JSON.parse(localStorage.getItem("hallify_chats") || "{}");
+      const userString = localStorage.getItem("user");
+      if (!userString) return 0;
+      const currentUser = JSON.parse(userString);
+      
+      let total = 0;
+      Object.values(chats).forEach(chat => {
+        // Count messages that were NOT sent by current user and are marked unread
+        chat.messages.forEach(msg => {
+          if (msg.senderId !== currentUser.id && msg.unread) {
+            total++;
+          }
+        });
+      });
+      setUnreadCount(total);
+    } catch (e) {
+      console.error("Error calc unread:", e);
+    }
+  };
 
   // ✅ Check login status
   const checkLoginStatus = () => {
@@ -22,8 +46,10 @@ const Navbar = () => {
       if (user?.role) {
         setUserRole(user.role);
       }
+      calculateUnread();
     } else {
       setUserRole(null);
+      setUnreadCount(0);
     }
   };
 
@@ -34,7 +60,13 @@ const Navbar = () => {
     const handleStorageChange = () => checkLoginStatus();
     window.addEventListener("storage", handleStorageChange);
 
-    return () => window.removeEventListener("storage", handleStorageChange);
+    // Refresh count occasionally since it's local
+    const interval = setInterval(calculateUnread, 3000);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   // ✅ Update navbar when route changes
@@ -61,61 +93,81 @@ const Navbar = () => {
   className={`fixed w-full top-0 z-50 px-6 py-4 transition duration-300 ${
     scrolled || location.pathname !== "/"
       ? "bg-opacity-60 backdrop-blur-sm shadow-lg"
-      : "bg-opacity-60 backdrop-blur-sm"
+      : scrolled ? "bg-white/80" : "bg-transparent text-white"
   }`}
+  style={{
+    backgroundColor: scrolled || location.pathname !== "/" ? "rgba(255, 255, 255, 0.8)" : "transparent",
+    color: scrolled || location.pathname !== "/" ? "black" : "white"
+  }}
 >
       <div className="flex items-center justify-between w-full px-4">
         <Link to='/'>
         <div
-          className={`text-xl font-bold ${
-            scrolled || location.pathname !== "/" ? "text-black" : "text-white"
+          className={`text-xl font-bold font-serif tracking-widest uppercase ${
+            scrolled || location.pathname !== "/" ? "text-rose-900" : "text-white"
           }`}
         >
-          Book your Space
+          Hallify
         </div>
         </Link>
 
         {/* Desktop Menu */}
         <ul
-          className={`hidden md:flex space-x-6 font-medium ${
-            scrolled || location.pathname !== "/" ? "text-black" : "text-white"
+          className={`hidden md:flex items-center space-x-8 font-medium ${
+            scrolled || location.pathname !== "/" ? "text-gray-800" : "text-white"
           }`}
         >
-          <li className="hover:text-gray-300">
-            <Link to="#">Home</Link>
+          <li className="hover:text-amber-500 transition-colors">
+            <Link to="/">Home</Link>
           </li>
           {isLoggedIn && (
-            <li className="hover:text-gray-300">
+            <li className="hover:text-amber-500 transition-colors">
               <Link to="/upload">Add Mahal</Link>
             </li>
           )}
 
           {!isLoggedIn ? (
             <>
-              <li className="hover:text-gray-300">
+              <li className="hover:text-amber-500 transition-colors">
                 <Link to="/register">Signup</Link>
               </li>
-              <li className="hover:text-gray-300">
+              <li className="bg-rose-800 text-white px-6 py-2 rounded-full hover:bg-rose-950 transition-all shadow-lg text-sm uppercase tracking-widest font-bold">
                 <Link to="/login">Login</Link>
               </li>
             </>
           ) : (
             <>
               <li>
-                <button onClick={handleLogout} className="hover:text-red-400">
-                  Logout
-                </button>
+                <Link to="/messages" className="relative group">
+                  <MessageSquare
+                    className={`w-6 h-6 hover:text-amber-500 transition-all ${
+                      scrolled || location.pathname !== "/"
+                        ? "text-gray-700"
+                        : "text-white"
+                    }`}
+                  />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-bounce">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
               </li>
               <li>
                 <Link to="/profile" title="Profile">
                   <User
-                    className={`w-6 h-6 hover:text-yellow-500 transition ${
+                    className={`w-6 h-6 hover:text-amber-500 transition-all ${
                       scrolled || location.pathname !== "/"
-                        ? "text-black"
+                        ? "text-gray-700"
                         : "text-white"
                     }`}
                   />
                 </Link>
+              </li>
+              <li>
+                <button onClick={handleLogout} className="text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-rose-600 transition-colors">
+                  Logout
+                </button>
               </li>
             </>
           )}

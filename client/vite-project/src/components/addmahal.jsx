@@ -39,6 +39,7 @@ function AddMahal() {
     setPreview(URL.createObjectURL(file));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -46,7 +47,6 @@ function AddMahal() {
       const data = new FormData();
       Object.keys(formData).forEach((key) => data.append(key, formData[key]));
       data.append("image", image);
-
       const res = await axios.post("http://localhost:5000/api/mahal/add", data, {
         headers: {
           "Content-Type": "multipart/form-data",

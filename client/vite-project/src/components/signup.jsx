@@ -41,7 +41,8 @@ function Signup() {
     e.preventDefault();
     setIsVerifying(true);
     try {
-      const verifyRes = await axios.post("https://hallify.onrender.com/api/users/verify-otp", {
+      const verifyRes = await axios.post("https://hallify.onrender.com/api/users/verify-otp", 
+         {
         email: formData.email,
         otp,
       });

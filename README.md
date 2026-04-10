@@ -9,133 +9,132 @@ The platform allows users to explore halls based on availability, view detailed 
 ## 🚀 Features
 
 ### 👥 User Features
-- User authentication (Signup / Login)
-- Browse available mahals
-- View hall details (capacity, pricing, location, amenities)
-- Check availability by date
-- Book halls for specific dates
-- View booking history
+- **OTP Verification**: Secure verification for signups and logins.
+- Browse available mahals with real-time status.
+- View hall details (capacity, pricing, location, amenities).
+- Check availability by date and book instantly.
+- View personal booking history and profile management.
 
 ### 🏢 Hall Owner Features
-- Add new hall listings
-- Update hall details
-- Manage availability
-- View and manage bookings
+- Add and manage hall listings with rich details.
+- Update availability and pricing in real-time.
+- View and manage incoming bookings for their halls.
+
+### 👑 Admin Dashboard
+- **User Management**: View all registered users and their details.
+- **Role Control**: Promote users to Owners or Admins.
+- **Account Management**: Securely delete users when necessary.
+- System-wide overview and auditing.
 
 ### 🔐 System Features
-- Secure authentication
-- Role-based access (User / Owner)
-- RESTful APIs
-- Responsive UI
+- **Secure Authentication**: JWT-based auth with OTP verification.
+- **Role-Based Access Control (RBAC)**: Distinct permissions for User, Owner, and Admin.
+- **RESTful APIs**: Well-structured and documented endpoints.
+- **Responsive UI**: Seamless experience across devices.
 
 ---
 
 ## 🛠 Tech Stack
 
 ### 🌐 Frontend
-- **React**
+- **React** (Vite)
 - **Tailwind CSS**
-- Axios
-- React Router
+- Axios & React Router
 
 ### ⚙️ Backend
-- **Node.js**
-- **Express.js**
+- **Node.js** & **Express.js**
 - REST API architecture
+- **Nodemailer** (for OTP delivery)
 
 ### 🗄️ Database
-- **MongoDB**
-- Mongoose ODM
+- **Supabase (PostgreSQL)**
+- SQL-based relational management
 
 ### 🔧 Tools & Platforms
+- **Bruno** (API testing & documentation)
 - Git & GitHub
-- Postman (API testing)
-- MongoDB Atlas
+- Supabase Cloud
 
 ---
 
 ## 📂 Project Structure
 
-### 🌐 Frontend
-
+### 🌐 Client (Frontend)
 ```text
-frontend/
+client/
 │── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── hooks/
-│   ├── utils/
+│   ├── components/  # Reusable UI elements
+│   ├── pages/       # Page-level components
+│   ├── services/    # API calling logic
+│   ├── hooks/       # Custom React hooks
+│   └── utils/       # Helper functions
 │── App.jsx
 │── index.css
-│── tailwind.config.js
 │── package.json
 ```
-### ⚙️ Backend
 
+### ⚙️ Server (Backend)
 ```text
-backend/
-│── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── models/
-│   ├── middlewares/
-│   ├── config/
-│── server.js
+server/
+│── controllers/  # Business logic
+│── routes/       # API endpoints
+│── models/       # Database schemas/queries
+│── middleware/   # Auth & Validation
+│── scripts/      # Database initialization scripts
+│── index.js      # Entry point
 │── package.json
 ```
 
-### ⚙️ Installation & Setup
-#### 1️⃣ Clone the Repository
+### 🧪 API Testing
+```text
+mahal/            # Bruno collection for API testing
+```
 
+---
+
+## ⚙️ Installation & Setup
+
+#### 1️⃣ Clone the Repository
 ```text 
 git clone https://github.com/your-username/hallify.git
 cd hallify
 ```
 
-#### 2️⃣ Frontend Setup
-
+#### 2️⃣ Client Setup
 ```text
-cd frontend
+cd client
 npm install
 npm run dev
 ```
 
-#### 3️⃣ Backend Setup
-
+#### 3️⃣ Server Setup
 ```text
-cd backend
+cd server
 npm install
 npm run dev
 ```
 
 ### 🔑 Environment Variables
 
-- Create a .env file in the backend folder:
+Create a `.env` file in the `server` folder:
 ```text
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+DATABASE_URL=your_supabase_postgresql_url
 JWT_SECRET=your_secret_key
+EMAIL_USER=your_email_address
+EMAIL_PASS=your_app_password
 ```
 
+---
+
 #### 🎯 Use Case Example
-
 - A user searches for a mahal for a wedding.
-
 - Hallify displays available halls with pricing and capacity.
-
-- The user selects a date and confirms the booking.
-
-- The hall owner receives booking details.
+- The user selects a date and confirms the booking after OTP verification.
+- The hall owner receives booking details and manages the schedule.
 
 #### 🔮 Future Enhancements
-
-- Online payment integration
-
-- Reviews & ratings
-
-- Admin dashboard
-
-- Advanced search & filters
-
-- Email / SMS notifications
+- [ ] Online payment integration (Stripe/Razorpay)
+- [ ] Reviews & ratings system
+- [ ] Advanced search filters (distance, budget range)
+- [ ] Push notifications for booking updates

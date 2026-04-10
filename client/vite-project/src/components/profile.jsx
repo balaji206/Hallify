@@ -19,24 +19,24 @@ const Profile = () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         // 1. Fetch Basic Profile
-        axios.get("http://localhost:5000/api/users/get", { headers })
+        axios.get("https://hallify.onrender.com/api/users/get", { headers })
             .then(res => {
                 const user = res.data;
                 setProfile(user);
 
                 // 2. Conditional Dashboard Fetching
                 if (user.role === 'user') {
-                    return axios.get("http://localhost:5000/api/booking/user", { headers });
+                    return axios.get("https://hallify.onrender.com/api/booking/user", { headers });
                 } else if (user.role === 'owner') {
                     return Promise.all([
-                        axios.get("http://localhost:5000/api/mahal/owner", { headers }),
-                        axios.get("http://localhost:5000/api/booking/owner", { headers })
+                        axios.get("https://hallify.onrender.com/api/mahal/owner", { headers }),
+                        axios.get("https://hallify.onrender.com/api/booking/owner", { headers })
                     ]);
                 } else if (user.role === 'admin') {
                     return Promise.all([
-                        axios.get("http://localhost:5000/api/users/all", { headers }),
-                        axios.get("http://localhost:5000/api/mahal/get", { headers }),
-                        axios.get("http://localhost:5000/api/booking/all", { headers })
+                        axios.get("https://hallify.onrender.com/api/users/all", { headers }),
+                        axios.get("https://hallify.onrender.com/api/mahal/get", { headers }),
+                        axios.get("https://hallify.onrender.com/api/booking/all", { headers })
                     ]);
                 }
             })
@@ -45,9 +45,9 @@ const Profile = () => {
                 if (Array.isArray(res)) {
                     // Owner or Admin (Multi-fetch)
                     if (profile?.role === 'owner' || (res.length === 2 && !Array.isArray(res[0].data))) {
-                         // This logic is a bit brittle, checking types is safer
+                        // This logic is a bit brittle, checking types is safer
                     }
-                    
+
                     // Specific mapping
                     if (profile?.role === 'owner') {
                         setOwnerMahals(res[0].data);
@@ -74,8 +74,8 @@ const Profile = () => {
     const handleRoleChange = async (userId, newRole) => {
         const token = localStorage.getItem("token")?.trim();
         try {
-            await axios.patch(`http://localhost:5000/api/users/role/${userId}`, 
-                { role: newRole }, 
+            await axios.patch(`https://hallify.onrender.com/api/users/role/${userId}`,
+                { role: newRole },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setAllUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
@@ -87,10 +87,10 @@ const Profile = () => {
 
     const handleDeleteUser = async (userId) => {
         if (!window.confirm("Are you sure you want to permanently remove this user account and all their associated listings/bookings?")) return;
-        
+
         const token = localStorage.getItem("token")?.trim();
         try {
-            await axios.delete(`http://localhost:5000/api/users/delete/${userId}`, 
+            await axios.delete(`https://hallify.onrender.com/api/users/delete/${userId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setAllUsers(prev => prev.filter(u => u.id !== userId));
@@ -102,11 +102,11 @@ const Profile = () => {
 
     const handleDeleteMahal = async (mahalId) => {
         if (!window.confirm("Are you sure you want to remove this venue listing?")) return;
-        
+
         const token = localStorage.getItem("token")?.trim();
         try {
             // Reusing owner delete if permitted or generic delete
-            await axios.delete(`http://localhost:5000/api/mahal/delete/${mahalId}`, 
+            await axios.delete(`https://hallify.onrender.com/api/mahal/delete/${mahalId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setAllMahals(prev => prev.filter(m => m.id !== mahalId));
@@ -184,7 +184,7 @@ const Profile = () => {
 
                 {/* Right Area: Dashboard Sections */}
                 <div className="lg:col-span-9 space-y-10">
-                    
+
                     {/* --- USER DASHBOARD --- */}
                     {profile.role === 'user' && (
                         <div className="space-y-6">
@@ -192,7 +192,7 @@ const Profile = () => {
                                 <h3 className="text-2xl font-serif font-bold text-rose-900">My Reservations</h3>
                                 <div className="text-[10px] uppercase font-bold tracking-widest text-gray-400">Total: {userBookings.length}</div>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 gap-4">
                                 {userBookings.length === 0 ? (
                                     <div className="bg-white p-12 rounded-[2rem] text-center border-2 border-dashed border-gray-100">
@@ -245,7 +245,7 @@ const Profile = () => {
                                     {ownerMahals.map(m => (
                                         <div key={m.id} className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
                                             <div className="relative h-40">
-                                                <img src={m.image_url ? `http://localhost:5000/uploads/${m.image_url}` : "https://via.placeholder.com/400x200"} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                <img src={m.image_url ? `https://hallify.onrender.com/uploads/${m.image_url}` : "https://via.placeholder.com/400x200"} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-rose-900 shadow-sm">
                                                     ₹{m.price}/day
                                                 </div>
@@ -357,8 +357,8 @@ const Profile = () => {
                                                         <td className="px-6 py-4 font-bold text-gray-800 text-sm">{u.fullName}</td>
                                                         <td className="px-6 py-4 text-sm text-gray-500">{u.email}</td>
                                                         <td className="px-6 py-4">
-                                                            <select 
-                                                                value={u.role} 
+                                                            <select
+                                                                value={u.role}
                                                                 onChange={(e) => handleRoleChange(u.id, e.target.value)}
                                                                 disabled={u.id === profile.id}
                                                                 className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full border-none focus:ring-2 focus:ring-rose-200 cursor-pointer ${u.role === 'admin' ? 'bg-rose-900 text-white' : u.role === 'owner' ? 'bg-amber-100 text-amber-800' : 'bg-gray-100 text-gray-600'} ${u.id === profile.id ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -370,7 +370,7 @@ const Profile = () => {
                                                         </td>
                                                         <td className="px-6 py-4 text-right">
                                                             {u.id !== profile.id && (
-                                                                <button 
+                                                                <button
                                                                     onClick={() => handleDeleteUser(u.id)}
                                                                     className="p-2 text-gray-400 hover:text-rose-600 transition-colors"
                                                                     title="Delete User"
@@ -413,7 +413,7 @@ const Profile = () => {
                                                                     <Edit size={16} />
                                                                 </button>
                                                             </Link>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleDeleteMahal(m.id)}
                                                                 className="p-2 text-gray-400 hover:text-rose-600 transition-colors"
                                                                 title="Delete Venue"
